@@ -24,8 +24,10 @@ def unzip_files(path: Path, cleanup=False):
 
 if __name__ == '__main__':
     argparse = argparse.ArgumentParser()
-    argparse.add_argument('-d', '--directory', type=str)
-    argparse.add_argument('-c', '--cleanup', action='store_true', default=False)
+    argparse.add_argument('-d', '--directory', type=str,
+                          help='Target directory to extract and process files', required=True)
+    argparse.add_argument('-c', '--cleanup', action='store_true',
+                          help='Cleanup original zip file when complete', required=False, default=False)
     args = argparse.parse_args()
 
     # process files
