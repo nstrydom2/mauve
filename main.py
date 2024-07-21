@@ -6,26 +6,26 @@ from pathlib import Path
 from zipfile import ZipFile
 
 
-def rename_files(dir_path: Path):
-    band_album = dir_path.name.split(' - ')
+def rename_files(path: Path):
+    band_album = path.name.split(' - ')
 
-    for idx, file in enumerate(dir_path.glob('*.m4a')):
-        fname = str(file.name).replace(' - '.join(band_album) + ' - ', '')
-        os.rename(dir_path / file.name, dir_path / fname)
+    for idx, file in enumerate(path.glob('*.m4a')):
+        fname = str(file.name).replace(' - '.join(band_album) + ' -', '').lstrip()
+        os.rename(path / file.name, path / fname)
 
 
-def unzip_files(dir_path: Path, cleanup=False):
-    for file in dir_path.glob('*.zip'):
+def unzip_files(path: Path, cleanup=False):
+    for file in path.glob('*.zip'):
         with ZipFile(file, 'r') as zf:
-            zf.extractall(dir_path)
+            zf.extractall(path)
             if cleanup:
                 os.remove(file)
 
 
 if __name__ == '__main__':
     argparse = argparse.ArgumentParser()
-    argparse.add_argument('--directory', type=str)
-    argparse.add_argument('--cleanup', action='store_true', default=False)
+    argparse.add_argument('-d', '--directory', type=str)
+    argparse.add_argument('-c', '--cleanup', action='store_true', default=False)
     args = argparse.parse_args()
 
     # process files
