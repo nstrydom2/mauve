@@ -23,16 +23,21 @@ def unzip_files(path: Path, cleanup=False):
 
 
 if __name__ == '__main__':
-    argparse = argparse.ArgumentParser()
+    argparse = argparse.ArgumentParser(description='Unzip and rename files')
     argparse.add_argument('-d', '--directory', type=str,
                           help='Target directory to extract and process files', required=True)
     argparse.add_argument('-c', '--cleanup', action='store_true',
                           help='Cleanup original zip file when complete', required=False, default=False)
     args = argparse.parse_args()
 
-    # process files
-    dir_path = Path(args.directory)
-    unzip_files(dir_path, args.cleanup)
+    try:
+        # process files
+        dir_path = Path(args.directory)
+        if not dir_path.is_dir():
+            raise NotADirectoryError(dir_path)
+        unzip_files(dir_path, args.cleanup)
 
-    for album in dir_path.glob('*'):
-        rename_files(album)
+        for album in dir_path.glob('*'):
+            rename_files(album)
+    except NotADirectoryError as ex:
+        print(f'Invalid input: Directory is required.\n\n\t{ex}')
